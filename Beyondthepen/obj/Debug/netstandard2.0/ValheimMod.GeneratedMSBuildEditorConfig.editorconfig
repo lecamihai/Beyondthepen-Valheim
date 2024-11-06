@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = ValheimMod
+build_property.ProjectDir = C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\ValheimMod\
