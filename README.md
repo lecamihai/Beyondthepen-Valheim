@@ -20,3 +20,5 @@ Valheim mod that moves deer and hare prefabs from default procreation/tameable a
 
 
 And then rebuilds the project, the neck will behave in the same way as the deer/hare.
+
+![image](https://github.com/user-attachments/assets/c8ed378a-0681-4ace-91cc-c781107737c5)
