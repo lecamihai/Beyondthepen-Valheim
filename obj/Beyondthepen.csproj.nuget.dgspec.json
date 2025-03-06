@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\Beyondthepen-Valheim\\Beyondthepen.csproj": {}
+    "C:\\Users\\Brn\\Beyondthepen-Valheim\\Beyondthepen.csproj": {}
   },
   "projects": {
-    "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\Beyondthepen-Valheim\\Beyondthepen.csproj": {
+    "C:\\Users\\Brn\\Beyondthepen-Valheim\\Beyondthepen.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\Beyondthepen-Valheim\\Beyondthepen.csproj",
+        "projectUniqueName": "C:\\Users\\Brn\\Beyondthepen-Valheim\\Beyondthepen.csproj",
         "projectName": "Beyondthepen",
-        "projectPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\Beyondthepen-Valheim\\Beyondthepen.csproj",
+        "projectPath": "C:\\Users\\Brn\\Beyondthepen-Valheim\\Beyondthepen.csproj",
         "packagesPath": "C:\\Users\\Brn\\.nuget\\packages\\",
-        "outputPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\Beyondthepen-Valheim\\obj\\",
+        "outputPath": "C:\\Users\\Brn\\Beyondthepen-Valheim\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Brn\\AppData\\Roaming\\NuGet\\NuGet.Config"

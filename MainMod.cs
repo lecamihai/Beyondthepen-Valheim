@@ -11,7 +11,7 @@ using BepInEx.Logging;
 
 namespace Beyondthepen
 {
-    [BepInPlugin("com.L3ca.Beyondthepen", "Beyond The Pen", "1.0.1")]
+    [BepInPlugin("com.L3ca.Beyondthepen", "Beyond The Pen", "1.1.1")]
     public class DeerTamingPlugin : BaseUnityPlugin
     {
         public bool TamingLogicApplied
