@@ -271,11 +271,15 @@ public class TameableAI : BaseAI
 			if (base.IsLookingAt(m_consumeTarget.transform.position, 20f, false))
 			{
 				if (m_consumeTarget.RemoveOne())
-				{
-					m_animator.SetTrigger("consume");
-					m_tamable?.OnConsumedItem(m_consumeTarget);
-					m_consumeTarget = null;  // Reset target after consumption
-				}
+                {
+                    m_animator.SetTrigger("consume");
+
+                    // Fully heal the animal
+                    m_character.SetHealth(m_character.GetMaxHealth());
+
+                    m_tamable?.OnConsumedItem(m_consumeTarget);
+                    m_consumeTarget = null;  // Reset target after consumption
+                }
 			}
 		}
 		return true;
