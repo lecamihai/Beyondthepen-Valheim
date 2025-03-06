@@ -57,9 +57,16 @@ public class CTP : MonoBehaviour
                     offspringCharacter.SetLevel(Mathf.Max(m_minOffspringLevel, m_character.GetLevel()));
                 }
 
+                // Copy originalName from parent's CTA to offspring's CTA
+                CTA parentCTA = m_character.GetComponent<CTA>();
+                CTA offspringCTA = newOffspring.GetComponent<CTA>();
+                if (parentCTA != null && offspringCTA != null)
+                {
+                    offspringCTA.originalName = parentCTA.originalName;
+                }
+
                 m_birthEffects.Create(newOffspring.transform.position, Quaternion.identity, null, 1f, -1);
             }
-
             return;
         }
 

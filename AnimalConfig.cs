@@ -22,9 +22,9 @@ public class AnimalConfig
             "$enemy_deer", new AnimalConfig
             {
                 AnimalName = "Deer",
-                TamingTime = 600f,
-                FedDuration = 600f,
-                PregnancyDuration = 600f,
+                TamingTime = 300f,
+                FedDuration = 1200f,
+                PregnancyDuration = 300f,
                 MaxCreatures = 6,
                 PartnerCheckRange = 2f,
                 PregnancyChance = 1f,
@@ -38,9 +38,9 @@ public class AnimalConfig
             "$enemy_hare", new AnimalConfig
             {
                 AnimalName = "Hare",
-                TamingTime = 600f,
-                FedDuration = 600f,
-                PregnancyDuration = 600f,
+                TamingTime = 300f,
+                FedDuration = 1200f,
+                PregnancyDuration = 300f,
                 MaxCreatures = 6,
                 PartnerCheckRange = 2f,
                 PregnancyChance = 1f,
