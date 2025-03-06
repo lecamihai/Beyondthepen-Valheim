@@ -173,7 +173,7 @@ namespace Beyondthepen
                         TameableAI tameableAI = animal.GetComponent<TameableAI>();
                         if (tameableAI != null)
                         {
-                            tameableAI.SetPlayerHasBlueberries(hasBlueberries);
+                            tameableAI.SetplayerHasFood(hasBlueberries);
                         }
                     }
                 }
@@ -277,7 +277,7 @@ namespace Beyondthepen
             }
             return false;
         }
-
+        
         public void CategorizeNearbyAnimals(Vector3 playerPosition, float range, out List<BaseAI> wildAnimals, out List<BaseAI> tamedAnimals)
         {
             wildAnimals = new List<BaseAI>();

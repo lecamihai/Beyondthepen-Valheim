@@ -10,6 +10,7 @@ public class TameableAI : BaseAI
         base.Awake();
         this.m_tamable = GetComponent<CTA>();
         this.m_procreation = GetComponent<CTP>();
+        m_config = AnimalConfig.GetConfig(m_character.m_name);
         var config = AnimalConfig.GetConfig(m_character.m_name);
 		isAfraidOfPlayer = true;
         if (config != null)
@@ -128,11 +129,11 @@ public class TameableAI : BaseAI
 		// Check if the player is holding blueberries, but only relevant to wild animals
 		if (!this.m_character.IsTamed())
 		{
-			CheckPlayerBlueberryStatus();
+			CheckPlayerFoodStatus();
 		}
 
 		// Only initiate fleeing if the deer is both wild and hungry (not in taming process or tamed)
-		if (isAfraidOfPlayer && !playerHasBlueberries && Vector3.Distance(transform.position, player.transform.position) < alertDistance)
+		if (isAfraidOfPlayer && !playerHasFood && Vector3.Distance(transform.position, player.transform.position) < alertDistance)
 		{
 			if (this.m_tamable != null && !this.m_character.IsTamed() && this.m_tamable.GetTameness() == 0)
 			{
@@ -153,7 +154,7 @@ public class TameableAI : BaseAI
 		}
 
 		// Continue taming if either blueberries are present, or taming has already started
-		if (playerHasBlueberries || tamingStarted || this.m_character.IsTamed())
+		if (playerHasFood || tamingStarted || this.m_character.IsTamed())
 		{
 			if (this.m_tamable != null && !this.m_character.IsTamed())
 			{
@@ -175,14 +176,14 @@ public class TameableAI : BaseAI
 		return true;
 	}
 
-	public void SetPlayerHasBlueberries(bool hasBlueberries)
+	public void SetplayerHasFood(bool hasBlueberries)
     {
-        playerHasBlueberries = hasBlueberries;
+        playerHasFood = hasBlueberries;
     }
 
-    private void CheckPlayerBlueberryStatus()
+    private void CheckPlayerFoodStatus()
     {
-        playerHasBlueberries = HasTamingItem(player);
+        playerHasFood = HasTamingItem(player);
     }
 
 	private void FleeFromPlayer(float dt)
@@ -196,17 +197,22 @@ public class TameableAI : BaseAI
 	}
 
     private bool HasTamingItem(Player player)
-	{
-		Inventory inventory = player.GetInventory();
-		foreach (ItemDrop.ItemData item in inventory.GetAllItems())
-		{
-			if (item.m_shared.m_name == "$item_blueberries" && item.m_stack > 0)
-			{
-				return true;
-			}
-		}
-		return false;
-	}
+    {
+        if (m_config == null || player == null)
+        {
+            return false;
+        }
+
+        Inventory inventory = player.GetInventory();
+        foreach (ItemDrop.ItemData item in inventory.GetAllItems())
+        {
+            if (item.m_dropPrefab != null && m_config.FoodItems.Contains(item.m_dropPrefab.name) && item.m_stack > 0)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private bool HandleIdleRoutine(float dt)
     {
@@ -558,11 +564,11 @@ public class TameableAI : BaseAI
     private Vector3 m_idleTargetPosition;
     private bool m_isSleeping;
 	private Player player;
-    private bool playerHasBlueberries;
+    private bool playerHasFood;
     private float alertDistance = 20f;
     private bool isAfraidOfPlayer;
 	private float m_inDangerTimer = 0f;
 	public float m_timeToSafe = 4f;
 	private bool tamingStarted = false;
-
+    private AnimalConfig m_config;
 }
