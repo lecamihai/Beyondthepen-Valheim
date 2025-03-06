@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1ynd7xpvKaU=",
+  "dgSpecHash": "mQtefZe6WDlYDfjGJz0J0JnwoiDgYCkavMQeZ+KIleh+SBL0Um2mEGMb23CItvRv1n/sD4TIVIxiOwHgf4PBvw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Mihai\\Desktop\\DEERMOD\\v11_namefix\\Beyondthepen\\Beyondthepen.csproj",
+  "projectFilePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Valheim\\BepInEx\\plugins\\Beyondthepen-Valheim\\Beyondthepen.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

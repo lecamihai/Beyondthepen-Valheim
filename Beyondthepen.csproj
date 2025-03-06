@@ -51,5 +51,8 @@
     <Reference Include="Localization">
     <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\assembly_guiutils.dll</HintPath>
     </Reference>
+    <Reference Include="Splatform">
+    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\Splatform.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

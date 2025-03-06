@@ -16,7 +16,8 @@
           "assembly_valheim": "0.0.0.0",
           "BepInEx": "5.4.22.0",
           "gui_framework": "0.0.0.0",
-          "Unity.InputSystem": "1.10.0.0",
+          "Splatform": "0.0.0.0",
+          "Unity.InputSystem": "1.11.2.0",
           "Unity.TextMeshPro": "0.0.0.0",
           "UnityEngine.AnimationModule": "0.0.0.0",
           "UnityEngine.AudioModule": "0.0.0.0",
@@ -85,11 +86,19 @@
           }
         }
       },
-      "Unity.InputSystem/1.10.0.0": {
+      "Splatform/0.0.0.0": {
+        "runtime": {
+          "Splatform.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Unity.InputSystem/1.11.2.0": {
         "runtime": {
           "Unity.InputSystem.dll": {
-            "assemblyVersion": "1.10.0.0",
-            "fileVersion": "1.10.0.0"
+            "assemblyVersion": "1.11.2.0",
+            "fileVersion": "1.11.2.0"
           }
         }
       },
@@ -645,30 +654,6 @@
           }
         }
       },
-      "PlatformTools.Common/0.0.0.0": {
-        "runtime": {
-          "PlatformTools.Common.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "PlatformTools.Platform.Steam/0.0.0.0": {
-        "runtime": {
-          "PlatformTools.Platform.Steam.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
-      "PlatformTools.Core/0.0.0.0": {
-        "runtime": {
-          "PlatformTools.Core.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
-        }
-      },
       "assembly_googleanalytics/0.0.0.0": {
         "runtime": {
           "assembly_googleanalytics.dll": {
@@ -744,7 +729,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "Unity.InputSystem/1.10.0.0": {
+    "Splatform/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Unity.InputSystem/1.11.2.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""
@@ -1090,21 +1080,6 @@
       "sha512": ""
     },
     "SoftReferenceableAssets/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "PlatformTools.Common/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "PlatformTools.Platform.Steam/0.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "PlatformTools.Core/0.0.0.0": {
       "type": "reference",
       "serviceable": false,
       "sha512": ""

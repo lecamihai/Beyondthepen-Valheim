@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Splatform;
 
 public class CTA : MonoBehaviour, Interactable, TextReceiver
 {
@@ -234,27 +235,26 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     }
 
     public string GetText()
-    {
-        if (!this.m_nview.IsValid())
-        {
-            return "";
-        }
-        return CensorShittyWords.FilterUGC(this.m_nview.GetZDO().GetString(ZDOVars.s_tamedName, ""), UGCType.Text, this.m_nview.GetZDO().GetString(ZDOVars.s_tamedNameAuthor, ""), 0L);
-    }
+	{
+		if (!this.m_nview.IsValid())
+		{
+			return "";
+		}
+		return CensorShittyWords.FilterUGC(this.m_nview.GetZDO().GetString(ZDOVars.s_tamedName, ""), UGCType.Text, new PlatformUserID(this.m_nview.GetZDO().GetString(ZDOVars.s_tamedNameAuthor, "")), 0L);
+	}
 
     public void SetText(string text)
-    {
-        if (!this.m_nview.IsValid())
-        {
-            return;
-        }
-        this.m_nview.InvokeRPC("SetName", new object[]
-        {
-            text,
-            PrivilegeManager.GetNetworkUserId()
-        });
-        this.m_character.m_name = text;
-    }
+	{
+		if (!this.m_nview.IsValid())
+		{
+			return;
+		}
+		this.m_nview.InvokeRPC("SetName", new object[]
+		{
+			text,
+			PlatformManager.DistributionPlatform.LocalUser.PlatformUserID.ToString()
+		});
+	}
 
     private void RPC_SetName(long sender, string name, string authorId)
     {
@@ -271,7 +271,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         this.m_nview.GetZDO().Set(ZDOVars.s_tamedName, name); // This saves the name to the server
         this.m_character.m_name = name;
     }
-
 
     public bool UseItem(Humanoid user, ItemDrop.ItemData item)
     {
@@ -389,24 +388,23 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     }
 }
 
-private void EnablePortalFollower()
-{
-    if (gameObject.GetComponent<PortalFollower>() == null)
+    private void EnablePortalFollower()
     {
-        gameObject.AddComponent<PortalFollower>();
+        if (gameObject.GetComponent<PortalFollower>() == null)
+        {
+            gameObject.AddComponent<PortalFollower>();
+        }
     }
-}
 
-private void DisablePortalFollower()
-{
-    PortalFollower portalFollower = gameObject.GetComponent<PortalFollower>();
-    if (portalFollower != null)
+    private void DisablePortalFollower()
     {
-        Destroy(portalFollower);
+        PortalFollower portalFollower = gameObject.GetComponent<PortalFollower>();
+        if (portalFollower != null)
+        {
+            Destroy(portalFollower);
+        }
     }
-}
-
-
+    
     private bool IsFollowingPlayer(Humanoid user)
     {
         // Check if the animal is tamed and actively following the player
