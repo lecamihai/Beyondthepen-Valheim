@@ -50,6 +50,7 @@ public class AnimalConfig
                 FoodItems = new List<string> { "Turnip", "Carrot"}
             }
         },
+        /*
         {
             "$enemy_neck", new AnimalConfig
             {
@@ -82,6 +83,7 @@ public class AnimalConfig
                 FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
             }
         },
+        */
     };
 
     public static AnimalConfig GetConfig(string animalName, string originalName = null)
