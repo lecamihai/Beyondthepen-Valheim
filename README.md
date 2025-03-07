@@ -6,4 +6,8 @@
 
 [![CurseForge](https://img.shields.io/badge/CurseForge-Beyond%20the%20Pen-orange)](https://www.curseforge.com/valheim/mods/beyond-the-pen)  
 
+**Downloads**
+
+![CurseForge](https://cf.way2muchnoise.eu/1129586.svg)
+
 [Download on CurseForge](https://www.curseforge.com/valheim/mods/beyond-the-pen)
