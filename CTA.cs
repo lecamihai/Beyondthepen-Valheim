@@ -13,29 +13,31 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         m_TameableAI = GetComponent<TameableAI>();
         m_CTP = GetComponent<CTP>();
 
-        // Store the original name (before any renaming)
-        originalName = m_character.m_name;
+        // Keep the original prefab name (e.g. "$enemy_deer") for all config lookups:
+        originalName = m_character.m_name;  
 
         if (m_nview.IsValid())
         {
-            // Load name from ZDO if it exists
+            // custom name
             string savedName = m_nview.GetZDO().GetString(ZDOVars.s_tamedName, originalName);
             m_character.m_name = savedName;
 
-            // Initialize custom effects (VFX from Boar, SFX from config)
+            // Initialize SFX/VFX based on the original prefab name (not the renamed one)
             InitializeCustomEffects();
 
+            // Register RPCs
             m_nview.Register<ZDOID, bool, bool>("Command", RPC_Command);
             m_nview.Register<string, string>("SetName", RPC_SetName);
             m_nview.Register("RPC_UnSummon", RPC_UnSummon);
         }
 
-        var config = AnimalConfig.GetConfig(originalName); // Use originalName for config lookup
+        // Pull the animal’s settings from the config dictionary using the original prefab name
+        var config = AnimalConfig.GetConfig(originalName);
         if (config != null)
         {
-            m_tamingTime = config.TamingTime;
-            m_fedDuration = config.FedDuration;
-            m_maxLovePoints = config.RequiredLovePoints;
+            m_tamingTime     = config.TamingTime;
+            m_fedDuration    = config.FedDuration;
+            m_maxLovePoints  = config.RequiredLovePoints;
         }
     }
 
