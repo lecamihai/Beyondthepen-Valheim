@@ -50,14 +50,13 @@ public class AnimalConfig
                 FoodItems = new List<string> { "Turnip", "Carrot"}
             }
         },
-        /*
         {
             "$enemy_neck", new AnimalConfig
             {
                 AnimalName = "Neck",
-                TamingTime = 600f,
-                FedDuration = 600f,
-                PregnancyDuration = 600f,
+                TamingTime = 300f,
+                FedDuration = 1200f,
+                PregnancyDuration = 300f,
                 MaxCreatures = 6,
                 PartnerCheckRange = 2f,
                 PregnancyChance = 1f,
@@ -67,7 +66,24 @@ public class AnimalConfig
                 FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
             }
         },
+        /*
         {
+            "$enemy_boar", new AnimalConfig
+            {
+                AnimalName = "Boar",
+                TamingTime = 300f,
+                FedDuration = 1200f,
+                PregnancyDuration = 300f,
+                MaxCreatures = 6,
+                PartnerCheckRange = 2f,
+                PregnancyChance = 1f,
+                SpawnOffset = 2f,
+                RequiredLovePoints = 5,
+                MinOffspringLevel = 1,
+                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
+            }
+        },
+        }
             "$enemy_wolf", new AnimalConfig
             {
                 AnimalName = "Wolf",

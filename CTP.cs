@@ -197,7 +197,6 @@ public class CTP : MonoBehaviour
         return Mathf.Max(timeRemaining, 0f); // Ensure non-negative
     }
 
-
     private void SetupDefaultEffects()
     {
         GameObject boarPrefab = ZNetScene.instance.GetPrefab("Boar");
