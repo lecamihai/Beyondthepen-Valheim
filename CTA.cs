@@ -22,7 +22,7 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             string savedName = m_nview.GetZDO().GetString(ZDOVars.s_tamedName, originalName);
             m_character.m_name = savedName;
 
-            // Initialize custom effects (VFX from Boar, SFX from Deer)
+            // Initialize custom effects (VFX from Boar, SFX from config)
             InitializeCustomEffects();
 
             m_nview.Register<ZDOID, bool, bool>("Command", RPC_Command);
@@ -51,11 +51,11 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
 
     internal void InitializeCustomEffects()
     {
-        // Get the animal's config
-        var config = AnimalConfig.GetConfig(m_character.m_name, originalName);
+        // Use the original name (before renaming) to get the animal's config
+        var config = AnimalConfig.GetConfig(originalName);
         if (config == null)
         {
-            Debug.LogError($"No config found for animal: {m_character.m_name}");
+            Debug.LogError($"No config found for animal: {originalName}");
             return;
         }
 
@@ -347,10 +347,12 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         {
             return;
         }
-        
+
         // Ensure the name is saved in ZDO and assign it to the character
         this.m_nview.GetZDO().Set(ZDOVars.s_tamedName, name); // This saves the name to the server
         this.m_character.m_name = name;
+
+        // Do not modify originalName here
     }
 
     public bool UseItem(Humanoid user, ItemDrop.ItemData item)

@@ -73,9 +73,9 @@ public class AnimalConfig
                 RequiredLovePoints = 5,
                 MinOffspringLevel = 1,
                 FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" },
-                PetEffectPrefab = "fx_neck_pet", // Example prefab name
-                TamedEffectPrefab = "fx_neck_tamed", // Example prefab name
-                SootheEffectPrefab = "fx_neck_soothe" // Example prefab name
+                PetEffectPrefab = "sfx_neck_idle", // Example prefab name
+                TamedEffectPrefab = "sfx_neck_idle", // Example prefab name
+                SootheEffectPrefab = "sfx_neck_idle" // Example prefab name
             }
         },
         // Add more animals here...
