@@ -57,7 +57,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         var config = AnimalConfig.GetConfig(originalName);
         if (config == null)
         {
-            Debug.LogError($"No config found for animal: {originalName}");
             return;
         }
 
@@ -95,14 +94,12 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     {
         if (string.IsNullOrEmpty(effectPrefabName))
         {
-            Debug.LogWarning($"Effect prefab name is null or empty for {effectPrefabName}");
             return;
         }
 
         GameObject effectPrefab = ZNetScene.instance.GetPrefab(effectPrefabName);
         if (effectPrefab == null)
         {
-            Debug.LogError($"Failed to load effect prefab: {effectPrefabName}");
             return;
         }
 
@@ -726,7 +723,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         if (m_CTP != null && m_CTP.IsPregnant())
         {
             // Do not increment love points if pregnant
-            Debug.Log($"{m_character.m_name} is pregnant and cannot gain love points.");
             return;
         }
 
@@ -738,13 +734,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             {
                 currentLovePoints++;
                 m_nview.GetZDO().Set(ZDOVars.s_lovePoints, currentLovePoints);
-
-                // Notify the player
-                Player closestPlayer = Player.GetClosestPlayer(base.transform.position, 30f);
-                if (closestPlayer)
-                {
-                    closestPlayer.Message(MessageHud.MessageType.Center, this.m_character.GetHoverName() + " $hud_tamelove", 0, null);
-                }
 
                 // Check if the animal is ready for procreation
                 if (currentLovePoints >= m_maxLovePoints && m_CTP != null)
