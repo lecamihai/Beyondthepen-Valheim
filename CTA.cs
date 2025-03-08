@@ -637,6 +637,39 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             this.ResetFeedingTimer();
         }
 
+        // Check if the animal is pregnant
+        if (m_CTP != null && m_CTP.IsPregnant())
+        {
+            // Do not increment love points if pregnant
+            Debug.Log($"{m_character.m_name} is pregnant and cannot gain love points.");
+            return;
+        }
+
+        // Increment love points when the animal eats
+        if (m_nview.IsValid() && m_character.IsTamed())
+        {
+            int currentLovePoints = m_nview.GetZDO().GetInt(ZDOVars.s_lovePoints, 0);
+            if (currentLovePoints < m_maxLovePoints)
+            {
+                currentLovePoints++;
+                m_nview.GetZDO().Set(ZDOVars.s_lovePoints, currentLovePoints);
+
+                // Notify the player
+                Player closestPlayer = Player.GetClosestPlayer(base.transform.position, 30f);
+                if (closestPlayer)
+                {
+                    closestPlayer.Message(MessageHud.MessageType.Center, this.m_character.GetHoverName() + " $hud_tamelove", 0, null);
+                }
+
+                // Check if the animal is ready for procreation
+                if (currentLovePoints >= m_maxLovePoints && m_CTP != null)
+                {
+                    m_CTP.Procreate();
+                }
+            }
+        }
+
+        // Play soothe effect
         this.m_sootheEffect.Create(this.m_character.GetCenterPoint(), Quaternion.identity, null, 1f, -1);
     }
 

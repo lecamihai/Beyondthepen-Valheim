@@ -35,7 +35,7 @@ public class CTP : MonoBehaviour
         InvokeRepeating(nameof(Procreate), UnityEngine.Random.Range(m_updateInterval, m_updateInterval + m_updateInterval * 0.5f), m_updateInterval);
     }
 
-    private void Procreate()
+    public void Procreate()
     {
         if (IsPregnant())
         {
