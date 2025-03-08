@@ -21,12 +21,15 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             // Load name from ZDO if it exists
             string savedName = m_nview.GetZDO().GetString(ZDOVars.s_tamedName, originalName);
             m_character.m_name = savedName;
-            
-            InitializeEffectsFromBoar();
+
+            // Initialize custom effects (VFX from Boar, SFX from Deer)
+            InitializeCustomEffects();
+
             m_nview.Register<ZDOID, bool, bool>("Command", RPC_Command);
             m_nview.Register<string, string>("SetName", RPC_SetName);
             m_nview.Register("RPC_UnSummon", RPC_UnSummon);
         }
+
         var config = AnimalConfig.GetConfig(originalName); // Use originalName for config lookup
         if (config != null)
         {
@@ -46,18 +49,94 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         }
     }
 
-    internal void InitializeEffectsFromBoar()
+    internal void InitializeCustomEffects()
     {
-        GameObject boarPrefab = ZNetScene.instance.GetPrefab("Boar");
-        if (boarPrefab != null)
+        // Get the animal's config
+        var config = AnimalConfig.GetConfig(m_character.m_name, originalName);
+        if (config == null)
         {
-            Tameable boarTameable = boarPrefab.GetComponent<Tameable>();
-            if (boarTameable != null)
+            Debug.LogError($"No config found for animal: {m_character.m_name}");
+            return;
+        }
+
+        // Load Boar's VFX (default for all animals)
+        GameObject boarPetFX = ZNetScene.instance.GetPrefab("fx_boar_pet");
+        if (boarPetFX != null)
+        {
+            ParticleSystem boarPetVFX = boarPetFX.GetComponentInChildren<ParticleSystem>();
+            if (boarPetVFX != null)
             {
-                this.m_petEffect = boarTameable.m_petEffect;
-                this.m_tamedEffect = boarTameable.m_tamedEffect;
-                this.m_sootheEffect = boarTameable.m_sootheEffect;
+                // Create a new EffectList with Boar's VFX
+                this.m_petEffect = new EffectList
+                {
+                    m_effectPrefabs = new EffectList.EffectData[]
+                    {
+                        new EffectList.EffectData
+                        {
+                            m_prefab = boarPetVFX.gameObject, // Use the GameObject containing the ParticleSystem
+                            m_enabled = true,
+                            m_attach = false,
+                            m_follow = false
+                        }
+                    }
+                };
             }
+        }
+
+        // Load animal-specific SFX from the config
+        LoadEffect(config.PetEffectPrefab, ref this.m_petEffect);
+        LoadEffect(config.TamedEffectPrefab, ref this.m_tamedEffect);
+        LoadEffect(config.SootheEffectPrefab, ref this.m_sootheEffect);
+    }
+
+    private void LoadEffect(string effectPrefabName, ref EffectList effectList)
+    {
+        if (string.IsNullOrEmpty(effectPrefabName))
+        {
+            Debug.LogWarning($"Effect prefab name is null or empty for {effectPrefabName}");
+            return;
+        }
+
+        GameObject effectPrefab = ZNetScene.instance.GetPrefab(effectPrefabName);
+        if (effectPrefab == null)
+        {
+            Debug.LogError($"Failed to load effect prefab: {effectPrefabName}");
+            return;
+        }
+
+        // Add the effect to the existing EffectList
+        if (effectList == null)
+        {
+            effectList = new EffectList
+            {
+                m_effectPrefabs = new EffectList.EffectData[]
+                {
+                    new EffectList.EffectData
+                    {
+                        m_prefab = effectPrefab,
+                        m_enabled = true,
+                        m_attach = false,
+                        m_follow = false
+                    }
+                }
+            };
+        }
+        else
+        {
+            // Append the new effect to the existing EffectList
+            EffectList.EffectData[] newEffects = new EffectList.EffectData[effectList.m_effectPrefabs.Length + 1];
+            for (int i = 0; i < effectList.m_effectPrefabs.Length; i++)
+            {
+                newEffects[i] = effectList.m_effectPrefabs[i];
+            }
+            newEffects[effectList.m_effectPrefabs.Length] = new EffectList.EffectData
+            {
+                m_prefab = effectPrefab,
+                m_enabled = true,
+                m_attach = false,
+                m_follow = false
+            };
+            effectList.m_effectPrefabs = newEffects;
         }
     }
 
@@ -185,11 +264,13 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             {
                 this.m_lastPetTime = Time.time;
 
-                if (this.m_petEffect != null) 
+                // Play the petting effect
+                if (this.m_petEffect != null)
                 {
                     this.m_petEffect.Create(base.transform.position, base.transform.rotation, null, 1f, -1);
                 }
 
+                // Increment love points
                 int currentLovePoints = this.m_nview.GetZDO().GetInt(ZDOVars.s_lovePoints, 0);
                 if (currentLovePoints < this.m_maxLovePoints)
                 {

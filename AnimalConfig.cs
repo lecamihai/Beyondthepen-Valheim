@@ -15,6 +15,9 @@ public class AnimalConfig
     public int RequiredLovePoints { get; set; }
     public int MinOffspringLevel { get; set; }
     public List<string> FoodItems { get; set; }
+    public string PetEffectPrefab { get; set; }
+    public string TamedEffectPrefab { get; set; }
+    public string SootheEffectPrefab { get; set; }
 
     public static Dictionary<string, AnimalConfig> AnimalConfigs = new Dictionary<string, AnimalConfig>
     {
@@ -31,7 +34,10 @@ public class AnimalConfig
                 SpawnOffset = 2f,
                 RequiredLovePoints = 5,
                 MinOffspringLevel = 1,
-                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
+                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" },
+                PetEffectPrefab = "sfx_deer_idle", // Example prefab name
+                TamedEffectPrefab = "sfx_deer_idle", // Example prefab name
+                SootheEffectPrefab = "sfx_deer_idle" // Example prefab name
             }
         },
         {
@@ -47,7 +53,10 @@ public class AnimalConfig
                 SpawnOffset = 2f,
                 RequiredLovePoints = 5,
                 MinOffspringLevel = 1,
-                FoodItems = new List<string> { "Turnip", "Carrot"}
+                FoodItems = new List<string> { "Turnip", "Carrot" },
+                PetEffectPrefab = "sfx_hare_idle", // Example prefab name
+                TamedEffectPrefab = "sfx_hare_idle", // Example prefab name
+                SootheEffectPrefab = "sfx_hare_idle" // Example prefab name
             }
         },
         {
@@ -63,43 +72,13 @@ public class AnimalConfig
                 SpawnOffset = 2f,
                 RequiredLovePoints = 5,
                 MinOffspringLevel = 1,
-                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
+                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" },
+                PetEffectPrefab = "fx_neck_pet", // Example prefab name
+                TamedEffectPrefab = "fx_neck_tamed", // Example prefab name
+                SootheEffectPrefab = "fx_neck_soothe" // Example prefab name
             }
         },
-        /*
-        {
-            "$enemy_boar", new AnimalConfig
-            {
-                AnimalName = "Boar",
-                TamingTime = 300f,
-                FedDuration = 1200f,
-                PregnancyDuration = 300f,
-                MaxCreatures = 6,
-                PartnerCheckRange = 2f,
-                PregnancyChance = 1f,
-                SpawnOffset = 2f,
-                RequiredLovePoints = 5,
-                MinOffspringLevel = 1,
-                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
-            }
-        },
-        }
-            "$enemy_wolf", new AnimalConfig
-            {
-                AnimalName = "Wolf",
-                TamingTime = 600f,
-                FedDuration = 600f,
-                PregnancyDuration = 600f,
-                MaxCreatures = 6,
-                PartnerCheckRange = 2f,
-                PregnancyChance = 1f,
-                SpawnOffset = 2f,
-                RequiredLovePoints = 5,
-                MinOffspringLevel = 1,
-                FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" }
-            }
-        },
-        */
+        // Add more animals here...
     };
 
     public static AnimalConfig GetConfig(string animalName, string originalName = null)

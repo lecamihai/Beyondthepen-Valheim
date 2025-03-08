@@ -54,5 +54,8 @@
     <Reference Include="Splatform">
     <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\Splatform.dll</HintPath>
     </Reference>
+    <Reference Include="ParticleSystem">
+    <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Valheim\valheim_Data\Managed\UnityEngine.ParticleSystemModule.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
