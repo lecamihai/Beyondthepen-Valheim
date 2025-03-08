@@ -59,6 +59,7 @@ public class AnimalConfig
                 SootheEffectPrefab = "sfx_hare_idle" // Example prefab name
             }
         },
+        /*
         {
             "$enemy_neck", new AnimalConfig
             {
@@ -79,6 +80,7 @@ public class AnimalConfig
             }
         },
         // Add more animals here...
+        */
     };
 
     public static AnimalConfig GetConfig(string animalName, string originalName = null)
