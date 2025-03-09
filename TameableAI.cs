@@ -327,22 +327,6 @@ public class TameableAI : BaseAI
         return false;
     }
 
-    public void SetDespawnInDay(bool despawn)
-    {
-        this.m_despawnInDay = despawn;
-        this.m_nview.GetZDO().Set(ZDOVars.s_despawnInDay, despawn);
-    }
-
-    public bool DespawnInDay()
-    {
-        if (Time.time - this.m_lastDespawnInDayCheck > 4f)
-        {
-            this.m_lastDespawnInDayCheck = Time.time;
-            this.m_despawnInDay = this.m_nview.GetZDO().GetBool(ZDOVars.s_despawnInDay, this.m_despawnInDay);
-        }
-        return this.m_despawnInDay;
-    }
-
     private void UpdateIdleBehavior(float dt)
     {
         m_idleStateTimer -= dt;
@@ -435,22 +419,6 @@ public class TameableAI : BaseAI
         m_isSleeping = false;
     }
 
-    public void SetEventCreature(bool despawn)
-    {
-        this.m_eventCreature = despawn;
-        this.m_nview.GetZDO().Set(ZDOVars.s_eventCreature, despawn);
-    }
-
-    public bool IsEventCreature()
-    {
-        if (Time.time - this.m_lastEventCreatureCheck > 4f)
-        {
-            this.m_lastEventCreatureCheck = Time.time;
-            this.m_eventCreature = this.m_nview.GetZDO().GetBool(ZDOVars.s_eventCreature, this.m_eventCreature);
-        }
-        return this.m_eventCreature;
-    }
-
     private void FollowTarget(float dt)
     {
         if (this.m_follow != null)
@@ -493,8 +461,6 @@ public class TameableAI : BaseAI
         Sleep
     }
 
-	private float m_lastDespawnInDayCheck = -9999f;
-    private float m_lastEventCreatureCheck = -9999f;
     public List<ItemDrop> m_consumeItems;
     public float m_consumeRange = 1.5f;
     public float m_consumeSearchRange = 20f;

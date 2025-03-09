@@ -85,7 +85,7 @@ public class CTP : MonoBehaviour
             return;
         }
 
-        int offspringCount = GetTamedDeerCount(transform.position, m_totalCheckRange);
+        int offspringCount = GetTamedAnimalCount(transform.position, m_totalCheckRange);
         if (offspringCount >= m_maxCreatures)
         {
             return;
@@ -162,15 +162,18 @@ public class CTP : MonoBehaviour
         return m_nview.IsValid() && m_nview.GetZDO().GetLong(ZDOVars.s_pregnant, 0L) != 0L;
     }
 
-    private int GetTamedDeerCount(Vector3 position, float range)
+    private int GetTamedAnimalCount(Vector3 position, float range)
     {
         int count = 0;
+        var config = AnimalConfig.GetConfig(m_character.m_name);
+        if (config == null) return 0;
+
         foreach (BaseAI baseAI in BaseAI.BaseAIInstances)
         {
             if (baseAI != null && Vector3.Distance(position, baseAI.transform.position) <= range)
             {
                 Character character = baseAI.GetComponent<Character>();
-                if (character != null && character.name.Contains("Deer") && character.IsTamed())
+                if (character != null && character.name.Contains(config.AnimalName))
                 {
                     count++;
                 }
