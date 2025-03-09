@@ -37,7 +37,7 @@ public class AnimalConfig
                 FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" },
                 PetEffectPrefab = "sfx_deer_idle", // Example prefab name
                 TamedEffectPrefab = "sfx_deer_idle", // Example prefab name
-                SootheEffectPrefab = "sfx_deer_idle" // Example prefab name
+                SootheEffectPrefab = "vfx_creature_soothed" // Example prefab name
             }
         },
         {
@@ -56,7 +56,7 @@ public class AnimalConfig
                 FoodItems = new List<string> { "Turnip", "Carrot" },
                 PetEffectPrefab = "sfx_hare_idle", // Example prefab name
                 TamedEffectPrefab = "sfx_hare_idle", // Example prefab name
-                SootheEffectPrefab = "sfx_hare_idle" // Example prefab name
+                SootheEffectPrefab = "vfx_creature_soothed" // Example prefab name
             }
         },
         /*

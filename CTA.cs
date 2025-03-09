@@ -449,26 +449,26 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     }
 
     public void Command(Humanoid user, bool message = true, bool stay = false)
-{
-    this.m_nview.InvokeRPC("Command", new object[]
     {
-        user.GetZDOID(),
-        message,
-        stay
-    });
+        this.m_nview.InvokeRPC("Command", new object[]
+        {
+            user.GetZDOID(),
+            message,
+            stay
+        });
 
-    if (this.m_nview.IsOwner())
-    {
-        if (!stay && IsFollowingPlayer(user))
+        if (this.m_nview.IsOwner())
         {
-            EnablePortalFollower();
-        }
-        else
-        {
-            DisablePortalFollower();
+            if (!stay && IsFollowingPlayer(user))
+            {
+                EnablePortalFollower();
+            }
+            else
+            {
+                DisablePortalFollower();
+            }
         }
     }
-}
 
     private void EnablePortalFollower()
     {
