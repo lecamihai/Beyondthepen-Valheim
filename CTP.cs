@@ -197,20 +197,6 @@ public class CTP : MonoBehaviour
         return Mathf.Max(timeRemaining, 0f); // Ensure non-negative
     }
 
-    private void SetupDefaultEffects()
-    {
-        GameObject boarPrefab = ZNetScene.instance.GetPrefab("Boar");
-        if (boarPrefab != null)
-        {
-            Procreation boarProcreation = boarPrefab.GetComponent<Procreation>();
-            if (boarProcreation != null)
-            {
-                m_loveEffects = boarProcreation.m_loveEffects;
-                m_birthEffects = boarProcreation.m_birthEffects;
-            }
-        }
-    }
-
     public float m_updateInterval = 10f;
     public float m_totalCheckRange = 10f;
     public int m_maxCreatures = 4;

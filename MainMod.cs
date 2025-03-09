@@ -278,35 +278,6 @@ namespace Beyondthepen
             return false;
         }
         
-        public void CategorizeNearbyAnimals(Vector3 playerPosition, float range, out List<BaseAI> wildAnimals, out List<BaseAI> tamedAnimals)
-        {
-            wildAnimals = new List<BaseAI>();
-            tamedAnimals = new List<BaseAI>();
-
-            foreach (BaseAI baseAI in BaseAI.BaseAIInstances)
-            {
-                if (baseAI != null)
-                {
-                    float distance = Vector3.Distance(playerPosition, baseAI.transform.position);
-                    if (distance <= range)
-                    {
-                        Character character = baseAI.GetComponent<Character>();
-                        if (character != null)
-                        {
-                            if (character.IsTamed())
-                            {
-                                tamedAnimals.Add(baseAI);
-                            }
-                            else
-                            {
-                                wildAnimals.Add(baseAI);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void OnDestroy()
         {
             //Debug.Log("[DeerTamingMod] OnDestroy: Cleaning up Deer Taming Mod");

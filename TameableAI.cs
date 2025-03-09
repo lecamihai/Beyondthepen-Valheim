@@ -291,12 +291,6 @@ public class TameableAI : BaseAI
 		return true;
 	}
 
-    public void SetPreventAlertAndFlee(bool prevent)
-    {
-        this.m_preventAlert = prevent;
-        this.m_preventFlee = prevent;
-    }
-
     private ItemDrop FindClosestConsumableItem(float maxRange)
 	{
 		if (TameableAI.m_itemMask == 0)
@@ -552,7 +546,6 @@ public class TameableAI : BaseAI
     private Character m_targetCreature; 
     private Vector3 m_lastKnownTargetPos = Vector3.zero; 
     private float m_timeSinceSensedTargetCreature; 
-    private float m_unableToAttackTargetTimer; 
     private GameObject m_follow;
     private static readonly int s_sleeping = ZSyncAnimation.GetHash("sleeping");
     public new CTA m_tamable;

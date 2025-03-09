@@ -433,21 +433,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         }
     }
 
-    public static void TameAllInArea(Vector3 point, float radius)
-    {
-        foreach (Character character in Character.GetAllCharacters())
-        {
-            if (!character.IsPlayer())
-            {
-                CTA component = character.GetComponent<CTA>();
-                if (component)
-                {
-                    component.Tame();
-                }
-            }
-        }
-    }
-
     public void Command(Humanoid user, bool message = true, bool stay = false)
     {
         this.m_nview.InvokeRPC("Command", new object[]
@@ -595,71 +580,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             {
                 this.UnSummon();
             }
-        }
-    }
-
-    private void UnsummonMaxInstances(int maxInstances)
-    {
-        if (!this.m_nview.IsValid() || !this.m_nview.IsOwner())
-        {
-            return;
-        }
-        GameObject followTarget = this.m_TameableAI.GetFollowTarget();
-        string followPlayerName = null;
-        if (followTarget != null)
-        {
-            Player component = followTarget.GetComponent<Player>();
-            if (component != null)
-            {
-                followPlayerName = component.GetPlayerName();
-            }
-        }
-        if (string.IsNullOrEmpty(followPlayerName))
-        {
-            return;
-        }
-
-        List<Character> allCharacters = Character.GetAllCharacters();
-        List<BaseAI> list = new List<BaseAI>();
-        foreach (Character character in allCharacters)
-        {
-            if (character.m_name == this.m_character.m_name)
-            {
-                ZNetView component2 = character.GetComponent<ZNetView>();
-                if (component2 == null)
-                {
-                    continue;
-                }
-                ZDO zdo = component2.GetZDO();
-                if (zdo == null)
-                {
-                    continue;
-                }
-                string a2 = zdo.GetString(ZDOVars.s_follow, "");
-                if (a2 != followPlayerName)
-                {
-                    continue;
-                }
-                TameableAI component3 = character.GetComponent<TameableAI>();
-                if (component3 != null)
-                {
-                    list.Add(component3);
-                }
-            }
-        }
-        list.Sort((BaseAI a, BaseAI b) => b.GetTimeSinceSpawned().CompareTo(a.GetTimeSinceSpawned()));
-        int num = list.Count - maxInstances;
-        for (int i = 0; i < num; i++)
-        {
-            CTA component4 = list[i].GetComponent<CTA>();
-            if (component4 != null)
-            {
-                component4.UnSummon();
-            }
-        }
-        if (num > 0 && Player.m_localPlayer)
-        {
-            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$hud_maxsummonsreached", 0, null);
         }
     }
 
