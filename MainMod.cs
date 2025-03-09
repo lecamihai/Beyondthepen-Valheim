@@ -30,8 +30,6 @@ namespace Beyondthepen
                 maxCreatures[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Max Creatures", animal.MaxCreatures, $"Max creatures for {animal.AnimalName}.");
                 partnerCheckRanges[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Partner Check Range", animal.PartnerCheckRange, $"Partner check range for {animal.AnimalName}.");
                 pregnancyChances[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Pregnancy Chance", animal.PregnancyChance, $"Pregnancy chance for {animal.AnimalName}.");
-                spawnOffsets[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Spawn Offset", animal.SpawnOffset, $"Spawn offset for {animal.AnimalName}.");
-                requiredLovePoints[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Required Love Points", animal.RequiredLovePoints, $"Required love points for {animal.AnimalName}.");
                 minOffspringLevels[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Min Offspring Level", animal.MinOffspringLevel, $"Minimum offspring level for {animal.AnimalName}.");
 
                 tamingTimes[animalKey].SettingChanged += OnConfigChanged;
@@ -40,8 +38,6 @@ namespace Beyondthepen
                 maxCreatures[animalKey].SettingChanged += OnConfigChanged;
                 partnerCheckRanges[animalKey].SettingChanged += OnConfigChanged;
                 pregnancyChances[animalKey].SettingChanged += OnConfigChanged;
-                spawnOffsets[animalKey].SettingChanged += OnConfigChanged;
-                requiredLovePoints[animalKey].SettingChanged += OnConfigChanged;
                 minOffspringLevels[animalKey].SettingChanged += OnConfigChanged;
             }
 
