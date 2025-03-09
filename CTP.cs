@@ -1,5 +1,5 @@
 
-// CTP.cs //
+// CTP.cs
 using System;
 using UnityEngine;
 using Beyondthepen;
@@ -57,7 +57,6 @@ public class CTP : MonoBehaviour
                     offspringCharacter.SetLevel(Mathf.Max(m_minOffspringLevel, m_character.GetLevel()));
                 }
 
-                // Copy originalName from parent's CTA to offspring's CTA
                 CTA parentCTA = m_character.GetComponent<CTA>();
                 CTA offspringCTA = newOffspring.GetComponent<CTA>();
                 if (parentCTA != null && offspringCTA != null)
@@ -184,7 +183,7 @@ public class CTP : MonoBehaviour
     {
         if (!IsPregnant())
         {
-            return 0f; // Not pregnant, no time remaining
+            return 0f;
         }
 
         long pregnantTimeTicks = m_nview.GetZDO().GetLong(ZDOVars.s_pregnant, 0L);
@@ -192,9 +191,8 @@ public class CTP : MonoBehaviour
         TimeSpan pregnancyDuration = TimeSpan.FromSeconds(m_pregnancyDuration);
         DateTime currentTime = ZNet.instance.GetTime();
 
-        // Calculate remaining time until birth
         float timeRemaining = (float)(pregnancyDuration - (currentTime - pregnancyStart)).TotalSeconds;
-        return Mathf.Max(timeRemaining, 0f); // Ensure non-negative
+        return Mathf.Max(timeRemaining, 0f);
     }
 
     public float m_updateInterval = 10f;

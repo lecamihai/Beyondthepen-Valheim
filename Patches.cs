@@ -1,4 +1,4 @@
-// PATCHES.CS //
+// PATCHES.CS
 using HarmonyLib;
 using UnityEngine;
 using System;
@@ -14,27 +14,23 @@ namespace Beyondthepen
     {
         static bool Prefix(Character __instance, ref string __result)
         {
-            // Retrieve the localized name of the animal using Localization.instance.Localize()
             string animalName = Localization.instance.Localize(__instance.m_name);
             CTA tameable = __instance.GetComponent<CTA>();
             
-            // If there's no CTA component, handle it gracefully
             if (tameable == null)
             {
-                return true;  // Skip original method
+                return true;
             }
             
-            // Use the original name if available for config lookup
             var config = AnimalConfig.GetConfig(animalName, tameable?.originalName);
             
-            // If the config exists, return the hover text provided by the CTA component
             if (config != null)
             {
                 __result = tameable.GetHoverText();
-                return false;  // Skip original method
+                return false;
             }
             
-            return true;  // Let the original method run if no config exists
+            return true;
         }
     }
 
@@ -48,10 +44,7 @@ namespace Beyondthepen
 
             if (!buttons.ContainsKey("DeerCommand"))
             {
-                // Use reflection to access the private AddButton method
                 var addButtonMethod = typeof(ZInput).GetMethod("AddButton", BindingFlags.NonPublic | BindingFlags.Instance);
-                
-                // The path for Key.G in Input System notation is "<Keyboard>/g"
                 addButtonMethod.Invoke(ZInput.instance, new object[] { "DeerCommand", "<Keyboard>/g", false, true, true, 0f, 0f });
             }
         }
@@ -65,23 +58,20 @@ namespace Beyondthepen
 
         public static void Prefix(Player __instance)
         {
-            NearbyAnimals.Clear();  // Clear list for each teleport action
+            NearbyAnimals.Clear();
             List<Character> animalsInRange = new List<Character>();
 
-            // Use a method to gather all characters in range of the player
             Character.GetCharactersInRange(__instance.transform.position, 20f, animalsInRange);
 
             foreach (Character animal in animalsInRange)
             {
                 var ctaComponent = animal.GetComponent<CTA>();
                 
-                // Check if the animal is tamed, has a CTA component, and is currently following the player
                 if (animal.IsTamed() && ctaComponent != null && ctaComponent.m_TameableAI.GetFollowTarget() == __instance.gameObject)
                 {
-                    NearbyAnimals.Add(animal);  // Add only animals actively following the player
+                    NearbyAnimals.Add(animal);
                 }
             }
-            //Debug.Log($"[DeerTamingMod] Found {NearbyAnimals.Count} animals for teleportation.");
         }
     }
 
@@ -100,23 +90,14 @@ namespace Beyondthepen
         {
             foreach (Character animal in Player_PatchGetAnimals.NearbyAnimals)
             {
-                if (animal == null) continue; // Skip null references
-
-                // Position offset to prevent overlap
+                if (animal == null) continue;
                 Vector2 offset = UnityEngine.Random.insideUnitCircle * 2f;
                 Vector3 positionOffset = new Vector3(offset.x, 0, offset.y);
                 Vector3 teleportPosition = ___m_teleportTargetPos + positionOffset;
-
-                // Teleport animal to the player's target position with offset
                 animal.transform.position = teleportPosition;
                 animal.transform.rotation = ___m_teleportTargetRot;
                 animal.SetLookDir(___m_teleportTargetRot * Vector3.forward);
-
-                // Retry logic in case initial teleportation fails
                 Player.m_localPlayer.StartCoroutine(ConfirmTeleport(animal, ___m_teleportTargetPos, ___m_teleportTargetRot));
-
-                // Log to confirm teleport details
-                //Debug.Log($"[DeerTamingMod] Attempted to teleport animal '{animal.m_name}' to position {teleportPosition}");
             }
             
             Player_PatchGetAnimals.NearbyAnimals.Clear();
@@ -125,21 +106,15 @@ namespace Beyondthepen
 
         private static IEnumerator ConfirmTeleport(Character animal, Vector3 targetPosition, Quaternion targetRotation)
         {
-            // Directly set the position and rotation once
             animal.transform.position = targetPosition;
             animal.transform.rotation = targetRotation;
-
-            // Optional: Add some logging to verify successful teleport
-            //Debug.Log($"[DeerTamingMod] Teleport successful for animal '{animal.m_name}' to position {animal.transform.position}");
-
-            // If there's an m_body component, reset the velocity to avoid physics issues
             Rigidbody animalBody = animal.GetComponent<Rigidbody>();
             if (animalBody != null)
             {
                 animalBody.velocity = Vector3.zero;
             }
 
-            yield break;  // Exit the coroutine after one successful teleport
+            yield break;
         }
     }
 

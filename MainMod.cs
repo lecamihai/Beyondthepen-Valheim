@@ -1,4 +1,4 @@
-﻿// mainmod.cs //
+﻿// mainmod.cs
 using BepInEx;
 using HarmonyLib;
 using UnityEngine;
@@ -18,14 +18,12 @@ namespace Beyondthepen
         {
             harmony = new Harmony("com.L3ca.deertamingmod");
             harmony.PatchAll();
-            //Debug.Log("[DeerTamingMod] Harmony patches applied.");
 
             foreach (var animalConfig in AnimalConfig.AnimalConfigs)
             {
                 var animalKey = animalConfig.Key;
                 var animal = animalConfig.Value;
 
-                // Bind the configuration entries
                 tamingTimes[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Taming Time", animal.TamingTime, $"Taming time for {animal.AnimalName}.");
                 fedDurations[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Fed Duration", animal.FedDuration, $"Fed duration for {animal.AnimalName}.");
                 pregnancyDurations[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Pregnancy Duration", animal.PregnancyDuration, $"Pregnancy duration for {animal.AnimalName}.");
@@ -36,7 +34,6 @@ namespace Beyondthepen
                 requiredLovePoints[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Required Love Points", animal.RequiredLovePoints, $"Required love points for {animal.AnimalName}.");
                 minOffspringLevels[animalKey] = Config.Bind($"{animal.AnimalName} Config", "Min Offspring Level", animal.MinOffspringLevel, $"Minimum offspring level for {animal.AnimalName}.");
 
-                // Subscribe to config changes
                 tamingTimes[animalKey].SettingChanged += OnConfigChanged;
                 fedDurations[animalKey].SettingChanged += OnConfigChanged;
                 pregnancyDurations[animalKey].SettingChanged += OnConfigChanged;
@@ -58,7 +55,6 @@ namespace Beyondthepen
 
         private void OnConfigChanged(object sender, EventArgs e)
         {
-            // Reapply the new configuration values
             ApplyNewConfigValues();
         }
 
@@ -90,7 +86,6 @@ namespace Beyondthepen
                 }
 
                 SetAnimalFood(TameableAI, TameableAI.GetComponent<Character>().m_name);
-                //Debug.Log("[DeerTamingMod] Applied new taming, fed, and pregnancy durations to animals.");
             }
         }
 
@@ -98,14 +93,12 @@ namespace Beyondthepen
         {
             if (TameableAI == null || ObjectDB.instance == null)
             {
-                //Debug.LogError("[DeerTamingMod] SetAnimalFood: TameableAI or ObjectDB.instance is null");
                 return;
             }
 
             var config = AnimalConfig.GetConfig(animalName);
             if (config == null)
             {
-                //Debug.LogError($"[DeerTamingMod] SetAnimalFood: No config found for animal '{animalName}'");
                 return;
             }
 
@@ -120,19 +113,16 @@ namespace Beyondthepen
                     if (itemDrop != null)
                     {
                         foodItems.Add(itemDrop);
-                        //Debug.Log($"[DeerTamingMod] SetAnimalFood: Added {foodName} to {animalName} food items");
                     }
                 }
                 else
                 {
-                    //Debug.LogError($"[DeerTamingMod] SetAnimalFood: Food prefab '{foodName}' not found!");
                 }
             }
 
             if (foodItems.Count > 0)
             {
                 TameableAI.m_consumeItems = foodItems;
-                //Debug.Log($"[DeerTamingMod] SetAnimalFood: Set consume items for {animalName}");
             }
         }
 
@@ -143,7 +133,6 @@ namespace Beyondthepen
                 yield return null;
             }
 
-            //Debug.Log("[DeerTamingMod] ZNetScene and ObjectDB initialized. Modifying animal prefabs.");
             foreach (var animalConfig in AnimalConfig.AnimalConfigs.Values)
             {
                 ModifyAnimalPrefab(animalConfig.AnimalName);
@@ -193,7 +182,6 @@ namespace Beyondthepen
             GameObject animalPrefab = ZNetScene.instance.GetPrefab(animalName);
             if (animalPrefab == null)
             {
-                //Debug.LogError($"[DeerTamingMod] {animalName} prefab not found!");
                 return;
             }
 
@@ -243,7 +231,6 @@ namespace Beyondthepen
             if (procreation == null)
             {
                 procreation = animalPrefab.AddComponent<CTP>();
-                //Debug.Log($"[DeerTamingMod] Added CTP component to {animalName} prefab.");
             }
 
             var config = AnimalConfig.GetConfig(animalName);
@@ -254,18 +241,15 @@ namespace Beyondthepen
                 procreation.m_pregnancyDuration = config.PregnancyDuration;
             }
 
-            //Debug.Log($"[DeerTamingMod] {animalName} prefab modification complete.");
         }
 
         private bool HasTamingItem(Player player)
         {
-            // Check if player has blueberries in inventory
             Inventory inventory = player.GetInventory();
             foreach (ItemDrop.ItemData item in inventory.GetAllItems())
             {
                 if (item.m_shared.m_name == "$item_blueberries" && item.m_stack > 0)
                 {
-                    //Debug.Log("[DeerTamingMod] Taming item detected in inventory.");
                     return true;
                 }
             }
@@ -274,11 +258,9 @@ namespace Beyondthepen
         
         private void OnDestroy()
         {
-            //Debug.Log("[DeerTamingMod] OnDestroy: Cleaning up Deer Taming Mod");
             if (harmony != null)
             {
                 harmony.UnpatchSelf();
-                //Debug.Log("[DeerTamingMod] OnDestroy: Harmony patches removed");
             }
             StopAllCoroutines();
         }
