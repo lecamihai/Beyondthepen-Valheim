@@ -14,12 +14,6 @@ namespace Beyondthepen
     [BepInPlugin("com.L3ca.Beyondthepen", "Beyond The Pen", "1.4.0")]
     public class DeerTamingPlugin : BaseUnityPlugin
     {
-        public bool TamingLogicApplied
-        {
-            get { return tamingLogicApplied; }
-            private set { tamingLogicApplied = value; }
-        }
-
         private void Awake()
         {
             harmony = new Harmony("com.L3ca.deertamingmod");
@@ -289,7 +283,6 @@ namespace Beyondthepen
             StopAllCoroutines();
         }
         
-        public static DeerTamingPlugin Instance { get; private set; }
         private Harmony harmony;
         private Dictionary<string, ConfigEntry<float>> tamingTimes = new Dictionary<string, ConfigEntry<float>>();
         private Dictionary<string, ConfigEntry<float>> fedDurations = new Dictionary<string, ConfigEntry<float>>();
@@ -300,7 +293,5 @@ namespace Beyondthepen
         private Dictionary<string, ConfigEntry<float>> spawnOffsets = new Dictionary<string, ConfigEntry<float>>();
         private Dictionary<string, ConfigEntry<int>> requiredLovePoints = new Dictionary<string, ConfigEntry<int>>();
         private Dictionary<string, ConfigEntry<int>> minOffspringLevels = new Dictionary<string, ConfigEntry<int>>();
-        private bool tamingLogicApplied = false;
-        public static List<Character> NearbyAnimals = new List<Character>();
     }
 }

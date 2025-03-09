@@ -376,43 +376,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         this.m_nview.GetZDO().Set(ZDOVars.s_tameLastFeeding, ZNet.instance.GetTime().Ticks);
     }
 
-    private void OnDeath()
-    {
-        // Saddle drop on death removed.
-    }
-
-    private void TamingUpdate()
-    {
-        if (!this.m_nview.IsValid() || !this.m_nview.IsOwner())
-        {
-            return;
-        }
-        if (this.m_character.IsTamed())
-        {
-            if (this.IsHungry())
-            {
-                return;
-            }
-        }
-        if (this.IsHungry())
-        {
-            return;
-        }
-        if (this.m_TameableAI.IsAlerted())
-        {
-            return;
-        }
-        this.m_TameableAI.SetDespawnInDay(false);
-        this.m_TameableAI.SetEventCreature(false);
-        this.DecreaseRemainingTime(3f);
-        if (this.GetRemainingTime() <= 0f)
-        {
-            this.Tame();
-            return;
-        }
-        this.m_sootheEffect.Create(base.transform.position, base.transform.rotation, null, 1f, -1);
-    }
-
     public void Tame()
     {
         Game.instance.IncrementPlayerStat(PlayerStatType.CreatureTamed, 1f);
@@ -671,19 +634,14 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     private const float m_tameDeltaTime = 3f;
     public float m_fedDuration = 30f;
     public float m_tamingTime = 1800f;
-    public bool m_startsTamed;
     public EffectList m_tamedEffect = new EffectList();
     public EffectList m_sootheEffect = new EffectList();
     public EffectList m_petEffect = new EffectList();
-    public bool m_commandable;
     public float m_unsummonDistance;
     public float m_unsummonOnOwnerLogoutSeconds;
     public EffectList m_unSummonEffect = new EffectList();
-    public Skills.SkillType m_levelUpOwnerSkill;
-    public float m_levelUpFactor = 1f;
     public float m_lovePoints = 0f;
     public float m_maxLovePoints = 5f;
-    public List<string> m_randomStartingName = new List<string>();
     internal Character m_character;
     private CTP m_CTP;
     internal TameableAI m_TameableAI;

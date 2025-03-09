@@ -89,34 +89,39 @@ namespace Beyondthepen
     [HarmonyPatch("UpdateTeleport")]
     public static class Player_PatchUpdateTeleport
     {
-        private static void Postfix(ref bool ___m_teleporting, ref float ___m_teleportTimer, ref Vector3 ___m_teleportTargetPos, ref Quaternion ___m_teleportTargetRot)
+
+        private static void Postfix(
+        ref bool ___m_teleporting, 
+        ref float ___m_teleportTimer, 
+        ref Vector3 ___m_teleportTargetPos, 
+        ref Quaternion ___m_teleportTargetRot)
+    {
+        if (___m_teleporting && ___m_teleportTimer > 2.0f)
         {
-            if (___m_teleporting && ___m_teleportTimer > 2.0f)  // Check teleport completion
+            foreach (Character animal in Player_PatchGetAnimals.NearbyAnimals)
             {
-                foreach (Character animal in Player_PatchGetAnimals.NearbyAnimals)
-                {
-                    if (animal == null) continue; // Skip null references
+                if (animal == null) continue; // Skip null references
 
-                    // Position offset to prevent overlap
-                    Vector2 offset = UnityEngine.Random.insideUnitCircle * 2f;
-                    Vector3 positionOffset = new Vector3(offset.x, 0, offset.y);
-                    Vector3 teleportPosition = ___m_teleportTargetPos + positionOffset;
+                // Position offset to prevent overlap
+                Vector2 offset = UnityEngine.Random.insideUnitCircle * 2f;
+                Vector3 positionOffset = new Vector3(offset.x, 0, offset.y);
+                Vector3 teleportPosition = ___m_teleportTargetPos + positionOffset;
 
-                    // Teleport animal to the player's target position with offset
-                    animal.transform.position = teleportPosition;
-                    animal.transform.rotation = ___m_teleportTargetRot;
-                    animal.SetLookDir(___m_teleportTargetRot * Vector3.forward);
+                // Teleport animal to the player's target position with offset
+                animal.transform.position = teleportPosition;
+                animal.transform.rotation = ___m_teleportTargetRot;
+                animal.SetLookDir(___m_teleportTargetRot * Vector3.forward);
 
-                    // Retry logic in case initial teleportation fails
-                    Player.m_localPlayer.StartCoroutine(ConfirmTeleport(animal, ___m_teleportTargetPos, ___m_teleportTargetRot));
+                // Retry logic in case initial teleportation fails
+                Player.m_localPlayer.StartCoroutine(ConfirmTeleport(animal, ___m_teleportTargetPos, ___m_teleportTargetRot));
 
-                    // Log to confirm teleport details
-                    //Debug.Log($"[DeerTamingMod] Attempted to teleport animal '{animal.m_name}' to position {teleportPosition}");
-                }
-
-                Player_PatchGetAnimals.NearbyAnimals.Clear();  // Clear list after teleporting
+                // Log to confirm teleport details
+                //Debug.Log($"[DeerTamingMod] Attempted to teleport animal '{animal.m_name}' to position {teleportPosition}");
             }
+            
+            Player_PatchGetAnimals.NearbyAnimals.Clear();
         }
+    }
 
         private static IEnumerator ConfirmTeleport(Character animal, Vector3 targetPosition, Quaternion targetRotation)
         {
