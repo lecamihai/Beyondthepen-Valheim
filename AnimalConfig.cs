@@ -1,4 +1,4 @@
-// animalconfig.cs //
+// animalconfig.cs
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -35,9 +35,9 @@ public class AnimalConfig
                 RequiredLovePoints = 5,
                 MinOffspringLevel = 1,
                 FoodItems = new List<string> { "Blueberries", "Raspberry", "Cloudberry" },
-                PetEffectPrefab = "sfx_deer_idle", // Example prefab name
-                TamedEffectPrefab = "sfx_deer_idle", // Example prefab name
-                SootheEffectPrefab = "vfx_creature_soothed" // Example prefab name
+                PetEffectPrefab = "sfx_deer_idle",
+                TamedEffectPrefab = "sfx_deer_idle",
+                SootheEffectPrefab = "vfx_creature_soothed"
             }
         },
         {
@@ -54,9 +54,9 @@ public class AnimalConfig
                 RequiredLovePoints = 5,
                 MinOffspringLevel = 1,
                 FoodItems = new List<string> { "Turnip", "Carrot" },
-                PetEffectPrefab = "sfx_hare_idle", // Example prefab name
-                TamedEffectPrefab = "sfx_hare_idle", // Example prefab name
-                SootheEffectPrefab = "vfx_creature_soothed" // Example prefab name
+                PetEffectPrefab = "sfx_hare_idle",
+                TamedEffectPrefab = "sfx_hare_idle",
+                SootheEffectPrefab = "vfx_creature_soothed"
             }
         },
         /*
@@ -87,19 +87,16 @@ public class AnimalConfig
     {
         animalName = animalName.Trim().ToLower();
 
-        // Attempt to find config with the given name
         if (AnimalConfigs.ContainsKey(animalName))
         {
             return AnimalConfigs[animalName];
         }
 
-        // If animal has been renamed, attempt to find config with the original name
         if (originalName != null && AnimalConfigs.ContainsKey(originalName.ToLower()))
         {
             return AnimalConfigs[originalName.ToLower()];
         }
 
-        // Fallback: attempt to strip "$enemy_" prefix for the lookup
         if (animalName.StartsWith("$enemy_"))
         {
             string simpleName = animalName.Substring(7);
@@ -111,5 +108,4 @@ public class AnimalConfig
 
         return null;
     }
-
 }

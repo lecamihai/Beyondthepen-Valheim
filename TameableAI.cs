@@ -1,4 +1,4 @@
-// TameableAI //
+// TameableAI.cs
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -123,16 +123,14 @@ public class TameableAI : BaseAI
 		player = Player.m_localPlayer;
 		if (player == null)
 		{
-			return false; // Exit if player reference is null
+			return false;
 		}
 
-		// Check if the player is holding blueberries, but only relevant to wild animals
 		if (!this.m_character.IsTamed())
 		{
 			CheckPlayerFoodStatus();
 		}
 
-		// Only initiate fleeing if the deer is both wild and hungry (not in taming process or tamed)
 		if (isAfraidOfPlayer && !playerHasFood && Vector3.Distance(transform.position, player.transform.position) < alertDistance)
 		{
 			if (this.m_tamable != null && !this.m_character.IsTamed() && this.m_tamable.GetTameness() == 0)
@@ -142,7 +140,6 @@ public class TameableAI : BaseAI
 			}
 		}
 
-		// Handle time-based reset of alert state
 		if (IsAlerted())
 		{
 			m_inDangerTimer += dt;
@@ -153,24 +150,22 @@ public class TameableAI : BaseAI
 			}
 		}
 
-		// Continue taming if either blueberries are present, or taming has already started
 		if (playerHasFood || tamingStarted || this.m_character.IsTamed())
 		{
 			if (this.m_tamable != null && !this.m_character.IsTamed())
 			{
-				tamingStarted = true; // Set tamingStarted to true as taming has begun
+				tamingStarted = true;
 				UpdateTaming(dt);
 			}
 
-			// Hunger check and feeding should proceed even if player lacks blueberries once tamed
 			if (this.m_tamable != null && this.m_tamable.IsHungry())
 			{
 				UpdateConsumeItem(this.m_character, dt);
 			}
 		}
 
-		// Normal tamed behaviors (procreation, idle routines) should proceed independently
 		if (HandleFollowRoutine(dt)) return true;
+
 		if (HandleIdleRoutine(dt)) return true;
 
 		return true;
@@ -188,12 +183,12 @@ public class TameableAI : BaseAI
 
 	private void FleeFromPlayer(float dt)
 	{
-		this.SetAlerted(true); // Add this line to initiate alert state and intensify fleeing
+		this.SetAlerted(true);
 
 		Vector3 fleeDirection = (transform.position - player.transform.position).normalized * alertDistance;
 		Vector3 fleePosition = transform.position + fleeDirection;
 
-		MoveTo(dt, fleePosition, 0f, true); // Move to a safe distance
+		MoveTo(dt, fleePosition, 0f, true);
 	}
 
     private bool HasTamingItem(Player player)
@@ -262,7 +257,6 @@ public class TameableAI : BaseAI
 		{
 			m_consumeSearchTimer = 0f;
 			
-			// Find the closest food item within range and path-check it
 			m_consumeTarget = FindClosestConsumableItem(m_consumeSearchRange);
 			if (m_consumeTarget == null)
 			{
@@ -270,7 +264,6 @@ public class TameableAI : BaseAI
 			}
 		}
 
-		// Check if the animal can move to and face the item to consume
 		if (m_consumeTarget != null && base.MoveTo(dt, m_consumeTarget.transform.position, m_consumeRange, false))
 		{
 			base.LookAt(m_consumeTarget.transform.position);
@@ -279,23 +272,14 @@ public class TameableAI : BaseAI
 				if (m_consumeTarget.RemoveOne())
                 {
                     m_animator.SetTrigger("consume");
-
-                    // Fully heal the animal
                     m_character.SetHealth(m_character.GetMaxHealth());
-
                     m_tamable?.OnConsumedItem(m_consumeTarget);
-                    m_consumeTarget = null;  // Reset target after consumption
+                    m_consumeTarget = null;
                 }
 			}
 		}
 		return true;
 	}
-
-    public void SetPreventAlertAndFlee(bool prevent)
-    {
-        this.m_preventAlert = prevent;
-        this.m_preventFlee = prevent;
-    }
 
     private ItemDrop FindClosestConsumableItem(float maxRange)
 	{
@@ -343,29 +327,13 @@ public class TameableAI : BaseAI
         return false;
     }
 
-    public void SetDespawnInDay(bool despawn)
-    {
-        this.m_despawnInDay = despawn;
-        this.m_nview.GetZDO().Set(ZDOVars.s_despawnInDay, despawn);
-    }
-
-    public bool DespawnInDay()
-    {
-        if (Time.time - this.m_lastDespawnInDayCheck > 4f)
-        {
-            this.m_lastDespawnInDayCheck = Time.time;
-            this.m_despawnInDay = this.m_nview.GetZDO().GetBool(ZDOVars.s_despawnInDay, this.m_despawnInDay);
-        }
-        return this.m_despawnInDay;
-    }
-
     private void UpdateIdleBehavior(float dt)
     {
         m_idleStateTimer -= dt;
 
         if (m_idleStateTimer <= 0)
         {
-            m_currentIdleState = (IdleState)UnityEngine.Random.Range(0, 3); // Randomly choose new idle state
+            m_currentIdleState = (IdleState)UnityEngine.Random.Range(0, 3);
 
             switch (m_currentIdleState)
             {
@@ -451,22 +419,6 @@ public class TameableAI : BaseAI
         m_isSleeping = false;
     }
 
-    public void SetEventCreature(bool despawn)
-    {
-        this.m_eventCreature = despawn;
-        this.m_nview.GetZDO().Set(ZDOVars.s_eventCreature, despawn);
-    }
-
-    public bool IsEventCreature()
-    {
-        if (Time.time - this.m_lastEventCreatureCheck > 4f)
-        {
-            this.m_lastEventCreatureCheck = Time.time;
-            this.m_eventCreature = this.m_nview.GetZDO().GetBool(ZDOVars.s_eventCreature, this.m_eventCreature);
-        }
-        return this.m_eventCreature;
-    }
-
     private void FollowTarget(float dt)
     {
         if (this.m_follow != null)
@@ -509,37 +461,6 @@ public class TameableAI : BaseAI
         Sleep
     }
 
-	private float m_lastDespawnInDayCheck = -9999f;
-    private float m_lastEventCreatureCheck = -9999f;
-    public Action<ItemDrop> m_onConsumedItem;
-    public float m_alertRange = 9999f; 
-    public bool m_fleeIfHurtWhenTargetCantBeReached = true; 
-    public float m_fleeUnreachableSinceAttacking = 30f; 
-    public float m_fleeUnreachableSinceHurt = 20f; 
-    public bool m_fleeIfNotAlerted; 
-    public float m_fleeIfLowHealth; 
-    public float m_fleeTimeSinceHurt = 20f; 
-    public bool m_fleeInLava = true; 
-    public bool m_circulateWhileCharging; 
-    public bool m_circulateWhileChargingFlying; 
-    public bool m_enableHuntPlayer; 
-    public bool m_attackPlayerObjects = false; 
-    public int m_privateAreaTriggerTreshold = 4; 
-    public float m_interceptTimeMax; 
-    public float m_interceptTimeMin; 
-    public float m_maxChaseDistance; 
-    public float m_minAttackInterval; 
-    public float m_circleTargetInterval; 
-    public float m_circleTargetDuration = 5f; 
-    public float m_circleTargetDistance = 10f; 
-    public bool m_sleeping;
-    public float m_wakeupRange = 5f;
-    public bool m_noiseWakeup;
-    public float m_maxNoiseWakeupRange = 50f;
-    public EffectList m_wakeupEffects = new EffectList();
-    public float m_wakeUpDelayMin;
-    public float m_wakeUpDelayMax;
-    public bool m_avoidLand;
     public List<ItemDrop> m_consumeItems;
     public float m_consumeRange = 1.5f;
     public float m_consumeSearchRange = 20f;
@@ -552,9 +473,7 @@ public class TameableAI : BaseAI
     private Character m_targetCreature; 
     private Vector3 m_lastKnownTargetPos = Vector3.zero; 
     private float m_timeSinceSensedTargetCreature; 
-    private float m_unableToAttackTargetTimer; 
     private GameObject m_follow;
-    private static readonly int s_sleeping = ZSyncAnimation.GetHash("sleeping");
     public new CTA m_tamable;
     private CTP m_procreation;
     private bool m_preventAlert = false;

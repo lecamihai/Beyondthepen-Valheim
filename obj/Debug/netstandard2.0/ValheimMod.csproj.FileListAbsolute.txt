@@ -1,5 +1,0 @@
-C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\ValheimMod\obj\Debug\netstandard2.0\ValheimMod.csproj.AssemblyReference.cache
-C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\ValheimMod\obj\Debug\netstandard2.0\ValheimMod.GeneratedMSBuildEditorConfig.editorconfig
-C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\ValheimMod\obj\Debug\netstandard2.0\ValheimMod.AssemblyInfoInputs.cache
-C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\ValheimMod\obj\Debug\netstandard2.0\ValheimMod.AssemblyInfo.cs
-C:\Program Files (x86)\Steam\steamapps\common\Valheim\BepInEx\ValheimMod\obj\Debug\netstandard2.0\ValheimMod.csproj.CoreCompileInputs.cache

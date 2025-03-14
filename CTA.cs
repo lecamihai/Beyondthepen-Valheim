@@ -1,4 +1,4 @@
-// CTA.cs //
+// CTA.cs
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,25 +13,18 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         m_TameableAI = GetComponent<TameableAI>();
         m_CTP = GetComponent<CTP>();
 
-        // Keep the original prefab name (e.g. "$enemy_deer") for all config lookups:
         originalName = m_character.m_name;  
 
         if (m_nview.IsValid())
         {
-            // custom name
             string savedName = m_nview.GetZDO().GetString(ZDOVars.s_tamedName, originalName);
             m_character.m_name = savedName;
-
-            // Initialize SFX/VFX based on the original prefab name (not the renamed one)
             InitializeCustomEffects();
-
-            // Register RPCs
             m_nview.Register<ZDOID, bool, bool>("Command", RPC_Command);
             m_nview.Register<string, string>("SetName", RPC_SetName);
             m_nview.Register("RPC_UnSummon", RPC_UnSummon);
         }
 
-        // Pull the animal’s settings from the config dictionary using the original prefab name
         var config = AnimalConfig.GetConfig(originalName);
         if (config != null)
         {
@@ -53,28 +46,25 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
 
     internal void InitializeCustomEffects()
     {
-        // Use the original name (before renaming) to get the animal's config
         var config = AnimalConfig.GetConfig(originalName);
         if (config == null)
         {
             return;
         }
 
-        // Load Boar's VFX (default for all animals)
         GameObject boarPetFX = ZNetScene.instance.GetPrefab("fx_boar_pet");
         if (boarPetFX != null)
         {
             ParticleSystem boarPetVFX = boarPetFX.GetComponentInChildren<ParticleSystem>();
             if (boarPetVFX != null)
             {
-                // Create a new EffectList with Boar's VFX
                 this.m_petEffect = new EffectList
                 {
                     m_effectPrefabs = new EffectList.EffectData[]
                     {
                         new EffectList.EffectData
                         {
-                            m_prefab = boarPetVFX.gameObject, // Use the GameObject containing the ParticleSystem
+                            m_prefab = boarPetVFX.gameObject,
                             m_enabled = true,
                             m_attach = false,
                             m_follow = false
@@ -84,7 +74,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             }
         }
 
-        // Load animal-specific SFX from the config
         LoadEffect(config.PetEffectPrefab, ref this.m_petEffect);
         LoadEffect(config.TamedEffectPrefab, ref this.m_tamedEffect);
         LoadEffect(config.SootheEffectPrefab, ref this.m_sootheEffect);
@@ -103,7 +92,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             return;
         }
 
-        // Add the effect to the existing EffectList
         if (effectList == null)
         {
             effectList = new EffectList
@@ -122,7 +110,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         }
         else
         {
-            // Append the new effect to the existing EffectList
             EffectList.EffectData[] newEffects = new EffectList.EffectData[effectList.m_effectPrefabs.Length + 1];
             for (int i = 0; i < effectList.m_effectPrefabs.Length; i++)
             {
@@ -186,7 +173,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
                 text += $"\nFood Level: {foodPercentage:0}%";
             }
 
-            // Display time until birth if pregnant
             if (this.m_CTP != null && this.m_CTP.IsPregnant())
             {
                 float timeUntilBirth = this.m_CTP.GetTimeUntilBirth();
@@ -263,13 +249,11 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             {
                 this.m_lastPetTime = Time.time;
 
-                // Play the petting effect
                 if (this.m_petEffect != null)
                 {
                     this.m_petEffect.Create(base.transform.position, base.transform.rotation, null, 1f, -1);
                 }
 
-                // Increment love points
                 int currentLovePoints = this.m_nview.GetZDO().GetInt(ZDOVars.s_lovePoints, 0);
                 if (currentLovePoints < this.m_maxLovePoints)
                 {
@@ -347,16 +331,13 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             return;
         }
 
-        // Ensure the name is saved in ZDO and assign it to the character
-        this.m_nview.GetZDO().Set(ZDOVars.s_tamedName, name); // This saves the name to the server
+        this.m_nview.GetZDO().Set(ZDOVars.s_tamedName, name);
         this.m_character.m_name = name;
 
-        // Do not modify originalName here
     }
 
     public bool UseItem(Humanoid user, ItemDrop.ItemData item)
     {
-        // Handles only petting actions without any saddle dependencies.
         if (!this.m_nview.IsValid())
         {
             return false;
@@ -365,7 +346,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         if (item != null && item.m_shared != null)
         {
             // Implement any additional item interactions here if necessary.
-            // Currently, no actions are performed.
         }
 
         return false;
@@ -374,43 +354,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     internal void ResetFeedingTimer()
     {
         this.m_nview.GetZDO().Set(ZDOVars.s_tameLastFeeding, ZNet.instance.GetTime().Ticks);
-    }
-
-    private void OnDeath()
-    {
-        // Saddle drop on death removed.
-    }
-
-    private void TamingUpdate()
-    {
-        if (!this.m_nview.IsValid() || !this.m_nview.IsOwner())
-        {
-            return;
-        }
-        if (this.m_character.IsTamed())
-        {
-            if (this.IsHungry())
-            {
-                return;
-            }
-        }
-        if (this.IsHungry())
-        {
-            return;
-        }
-        if (this.m_TameableAI.IsAlerted())
-        {
-            return;
-        }
-        this.m_TameableAI.SetDespawnInDay(false);
-        this.m_TameableAI.SetEventCreature(false);
-        this.DecreaseRemainingTime(3f);
-        if (this.GetRemainingTime() <= 0f)
-        {
-            this.Tame();
-            return;
-        }
-        this.m_sootheEffect.Create(base.transform.position, base.transform.rotation, null, 1f, -1);
     }
 
     public void Tame()
@@ -430,21 +373,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         if (closestPlayer)
         {
             closestPlayer.Message(MessageHud.MessageType.Center, this.m_character.m_name + " $hud_tamedone", 0, null);
-        }
-    }
-
-    public static void TameAllInArea(Vector3 point, float radius)
-    {
-        foreach (Character character in Character.GetAllCharacters())
-        {
-            if (!character.IsPlayer())
-            {
-                CTA component = character.GetComponent<CTA>();
-                if (component)
-                {
-                    component.Tame();
-                }
-            }
         }
     }
 
@@ -489,7 +417,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     
     private bool IsFollowingPlayer(Humanoid user)
     {
-        // Check if the animal is tamed and actively following the player
         return m_character.IsTamed() && m_TameableAI.GetFollowTarget() == user.gameObject;
     }
     
@@ -502,7 +429,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         }
         else if (this.m_TameableAI.GetFollowTarget())
         {
-            // Existing logic for stopping following and switching to idle (patrol, etc.)
             this.m_TameableAI.SetFollowTarget(null);
             this.m_TameableAI.SetPatrolPoint();
 
@@ -515,7 +441,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         }
         else
         {
-            // Start following the player
             this.m_TameableAI.ResetPatrolPoint();
             this.m_TameableAI.SetFollowTarget(player.gameObject);
 
@@ -598,71 +523,6 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
         }
     }
 
-    private void UnsummonMaxInstances(int maxInstances)
-    {
-        if (!this.m_nview.IsValid() || !this.m_nview.IsOwner())
-        {
-            return;
-        }
-        GameObject followTarget = this.m_TameableAI.GetFollowTarget();
-        string followPlayerName = null;
-        if (followTarget != null)
-        {
-            Player component = followTarget.GetComponent<Player>();
-            if (component != null)
-            {
-                followPlayerName = component.GetPlayerName();
-            }
-        }
-        if (string.IsNullOrEmpty(followPlayerName))
-        {
-            return;
-        }
-
-        List<Character> allCharacters = Character.GetAllCharacters();
-        List<BaseAI> list = new List<BaseAI>();
-        foreach (Character character in allCharacters)
-        {
-            if (character.m_name == this.m_character.m_name)
-            {
-                ZNetView component2 = character.GetComponent<ZNetView>();
-                if (component2 == null)
-                {
-                    continue;
-                }
-                ZDO zdo = component2.GetZDO();
-                if (zdo == null)
-                {
-                    continue;
-                }
-                string a2 = zdo.GetString(ZDOVars.s_follow, "");
-                if (a2 != followPlayerName)
-                {
-                    continue;
-                }
-                TameableAI component3 = character.GetComponent<TameableAI>();
-                if (component3 != null)
-                {
-                    list.Add(component3);
-                }
-            }
-        }
-        list.Sort((BaseAI a, BaseAI b) => b.GetTimeSinceSpawned().CompareTo(a.GetTimeSinceSpawned()));
-        int num = list.Count - maxInstances;
-        for (int i = 0; i < num; i++)
-        {
-            CTA component4 = list[i].GetComponent<CTA>();
-            if (component4 != null)
-            {
-                component4.UnSummon();
-            }
-        }
-        if (num > 0 && Player.m_localPlayer)
-        {
-            Player.m_localPlayer.Message(MessageHud.MessageType.Center, "$hud_maxsummonsreached", 0, null);
-        }
-    }
-
     private void UnSummon()
     {
         if (!this.m_nview.IsValid())
@@ -719,14 +579,11 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             this.ResetFeedingTimer();
         }
 
-        // Check if the animal is pregnant
         if (m_CTP != null && m_CTP.IsPregnant())
         {
-            // Do not increment love points if pregnant
             return;
         }
 
-        // Increment love points when the animal eats
         if (m_nview.IsValid() && m_character.IsTamed())
         {
             int currentLovePoints = m_nview.GetZDO().GetInt(ZDOVars.s_lovePoints, 0);
@@ -734,16 +591,12 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
             {
                 currentLovePoints++;
                 m_nview.GetZDO().Set(ZDOVars.s_lovePoints, currentLovePoints);
-
-                // Check if the animal is ready for procreation
                 if (currentLovePoints >= m_maxLovePoints && m_CTP != null)
                 {
                     m_CTP.Procreate();
                 }
             }
         }
-
-        // Play soothe effect
         this.m_sootheEffect.Create(this.m_character.GetCenterPoint(), Quaternion.identity, null, 1f, -1);
     }
 
@@ -751,19 +604,14 @@ public class CTA : MonoBehaviour, Interactable, TextReceiver
     private const float m_tameDeltaTime = 3f;
     public float m_fedDuration = 30f;
     public float m_tamingTime = 1800f;
-    public bool m_startsTamed;
     public EffectList m_tamedEffect = new EffectList();
     public EffectList m_sootheEffect = new EffectList();
     public EffectList m_petEffect = new EffectList();
-    public bool m_commandable;
     public float m_unsummonDistance;
     public float m_unsummonOnOwnerLogoutSeconds;
     public EffectList m_unSummonEffect = new EffectList();
-    public Skills.SkillType m_levelUpOwnerSkill;
-    public float m_levelUpFactor = 1f;
     public float m_lovePoints = 0f;
     public float m_maxLovePoints = 5f;
-    public List<string> m_randomStartingName = new List<string>();
     internal Character m_character;
     private CTP m_CTP;
     internal TameableAI m_TameableAI;
