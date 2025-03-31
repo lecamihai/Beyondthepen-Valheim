@@ -4,6 +4,5 @@
 
 **Beyond the Pen** is a Valheim mod that enables taming for Deer and Hares but not only if you tinker with the [animal config file](https://github.com/lecamihai/Beyondthepen-Valheim/blob/main/AnimalConfig.cs) and then rebuild the mod.
 
-[![CurseForge](https://cf.way2muchnoise.eu/title/1129586.svg)](https://www.curseforge.com/valheim/mods/beyond-the-pen)  [![CurseForge](https://cf.way2muchnoise.eu/1129586.svg)](https://www.curseforge.com/valheim/mods/beyond-the-pen)
+https://www.nexusmods.com/valheim/mods/2991
 
-[Download on CurseForge](https://www.curseforge.com/valheim/mods/beyond-the-pen)
